@@ -1,5 +1,6 @@
 import { datatrustConfig } from '@datatrust/config';
 import { Reveal, SiteShell } from '../components/site-shell';
+import { InvestorDepth } from '../components/investor-depth';
 
 const signals = [
   ['01', 'DATA DEMAND', 'AI expands the quantity of useful data required to train, evaluate and operate intelligent systems.'],
@@ -58,7 +59,7 @@ export default function HomePage() {
 
       <section className="section shell" id="presale">
         <Reveal><div className="eyebrow">06 / PARTICIPATION</div><h2>A serious participation flow, before a payment flow.</h2><p>The presale interface is designed around explicit order states, payment evidence, manual verification and a derived allocation ledger. The current live-funds gate remains closed until the canonical price, routes and legal/operational clearance are confirmed.</p></Reveal>
-        <div className="priceCard"><div><div className="eyebrow">ILLUSTRATIVE PRICE BAND</div><div className="priceValue">$0.001 <small>— $0.003 / $DTR</small></div><div className="priceRange"><span>Lower bound</span><span>Upper bound</span></div><p className="priceDisclaimer">The requested range is recorded as a decision-state range. The starting price supplied in the latest instruction conflicts with that range, so no live price is published until a single canonical starting price is confirmed.</p></div><div className="priceChart"><svg viewBox="0 0 600 180" preserveAspectRatio="none" role="img" aria-label="Illustrative DTR price range chart"><defs><linearGradient id="priceStroke" x1="0" x2="1"><stop offset="0" stopColor="#8ea7ff"/><stop offset="1" stopColor="#b59bff"/></linearGradient><linearGradient id="priceArea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#7f9cff" stopOpacity=".18"/><stop offset="1" stopColor="#7f9cff" stopOpacity="0"/></linearGradient></defs><path className="area" d="M0 145 C70 115 105 125 150 92 S240 50 300 92 S390 132 430 72 S510 35 600 58 L600 180 L0 180 Z"/><path d="M0 145 C70 115 105 125 150 92 S240 50 300 92 S390 132 430 72 S510 35 600 58"/></svg></div></div>
+        <div className="priceCard"><div><div className="eyebrow">ILLUSTRATIVE PRICE BAND</div><div className="priceValue">${range.min.toFixed(3)} <small>— ${range.max.toFixed(3)} / $DTR</small></div><div className="priceRange"><span>Lower bound</span><span>Upper bound</span></div><p className="priceDisclaimer">The requested range is recorded as a decision-state range. A single canonical starting price must be confirmed before live pricing is enabled; this visualization is not a market forecast.</p></div><div className="priceChart"><svg viewBox="0 0 600 180" preserveAspectRatio="none" role="img" aria-label="Illustrative DTR price range chart"><defs><linearGradient id="priceStroke" x1="0" x2="1"><stop offset="0" stopColor="#8ea7ff"/><stop offset="1" stopColor="#b59bff"/></linearGradient><linearGradient id="priceArea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#7f9cff" stopOpacity=".18"/><stop offset="1" stopColor="#7f9cff" stopOpacity="0"/></linearGradient></defs><path className="area" d="M0 145 C70 115 105 125 150 92 S240 50 300 92 S390 132 430 72 S510 35 600 58 L600 180 L0 180 Z"/><path d="M0 145 C70 115 105 125 150 92 S240 50 300 92 S390 132 430 72 S510 35 600 58"/></svg></div></div>
         <div className="participationGrid"><Reveal><div><span>01</span><h3>Review</h3><p>Understand round, price, accepted assets, networks and restrictions.</p></div></Reveal><Reveal><div><span>02</span><h3>Create an order</h3><p>Lock the applicable terms to the order instead of changing them retroactively.</p></div></Reveal><Reveal><div><span>03</span><h3>Submit evidence</h3><p>Provide the transaction reference. Submission is not confirmation.</p></div></Reveal><Reveal><div><span>04</span><h3>Verification</h3><p>Administrative review produces the final state and auditable allocation record.</p></div></Reveal></div>
         <a className="button primary" href="/presale">Enter presale experience <span>↗</span></a>
       </section>
@@ -70,6 +71,8 @@ export default function HomePage() {
 
       <section className="section shell closing" id="docs">
         <Reveal><div className="eyebrow">08 / DOCUMENTATION & RISK</div><h2>Serious systems deserve serious documentation.</h2><p>Read the whitepaper, tokenomics, presale terms and risk disclosures as the primary source for project claims. Vision, current implementation and planned infrastructure are deliberately separated.</p><div className="docActions"><a className="button secondary" href="/whitepaper">Read whitepaper <span>→</span></a><a className="button secondary" href="/risk">Review risk & disclosures <span>→</span></a></div></Reveal></section>
+
+      <InvestorDepth />
     </main>
   </SiteShell>;
 }
