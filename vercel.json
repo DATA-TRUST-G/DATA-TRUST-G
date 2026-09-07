@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.com/vercel.json",
   "framework": "nextjs",
-  "installCommand": "corepack enable && pnpm install --no-frozen-lockfile",
+  "installCommand": "corepack enable && pnpm install --no-frozen-lockfile --registry=https://registry.npmjs.org --fetch-retries=5 --fetch-retry-mintimeout=10000 --fetch-retry-maxtimeout=60000 --fetch-timeout=120000",
   "buildCommand": "pnpm --filter @datatrust/web build"
 }
