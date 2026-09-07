@@ -1,4 +1,41 @@
-export const datatrustConfig = {
+export type PresaleStatus = 'CONFIGURATION_REQUIRED' | 'CONFIGURED' | 'PAUSED';
+export type LegalGate = 'REQUIRES_LEGAL_AND_OPERATIONAL_CLEARANCE' | 'CLEARED';
+
+export interface DataTrustConfig {
+  brand: {
+    name: string;
+    positioning: string;
+  };
+  token: {
+    symbol: string;
+    fixedSupply: number;
+    allocation: {
+      userRewards: number;
+      ecosystem: number;
+      team: number;
+      strategicPartnerships: number;
+      treasury: number;
+    };
+  };
+  presale: {
+    status: PresaleStatus;
+    liveFundsEnabled: boolean;
+    legalGate: LegalGate;
+    round: string | null;
+    price: number | null;
+    acceptedAssets: string[];
+    networks: string[];
+    receivingRoutes: string[];
+  };
+  contentState: {
+    current: boolean;
+    planned: boolean;
+    proposed: boolean;
+    conflictsRequireDecision: boolean;
+  };
+}
+
+export const datatrustConfig: DataTrustConfig = {
   brand: {
     name: 'DataTrust',
     positioning: 'Ethical Data Infrastructure for the AI Economy.',
@@ -15,9 +52,9 @@ export const datatrustConfig = {
     },
   },
   presale: {
-    status: 'CONFIGURATION_REQUIRED' as const,
+    status: 'CONFIGURATION_REQUIRED',
     liveFundsEnabled: false,
-    legalGate: 'REQUIRES_LEGAL_AND_OPERATIONAL_CLEARANCE' as const,
+    legalGate: 'REQUIRES_LEGAL_AND_OPERATIONAL_CLEARANCE',
     round: null,
     price: null,
     acceptedAssets: [],
@@ -30,6 +67,4 @@ export const datatrustConfig = {
     proposed: true,
     conflictsRequireDecision: true,
   },
-} as const;
-
-export type DataTrustConfig = typeof datatrustConfig;
+};
