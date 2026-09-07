@@ -1,0 +1,13 @@
+{
+  "name": "datatrust",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.14.0",
+  "scripts": {
+    "dev": "pnpm --filter @datatrust/web dev",
+    "build": "pnpm --filter @datatrust/web build",
+    "lint": "pnpm --filter @datatrust/web lint",
+    "typecheck": "pnpm --filter @datatrust/web typecheck",
+    "test": "pnpm --filter @datatrust/web test"
+  }
+}
