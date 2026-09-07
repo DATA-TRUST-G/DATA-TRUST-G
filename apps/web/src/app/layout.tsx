@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import './home.css';
 
 export const metadata: Metadata = {
   title: 'DataTrust — Ethical Data Infrastructure for the AI Economy',
