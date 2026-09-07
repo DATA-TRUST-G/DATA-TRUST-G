@@ -2,6 +2,7 @@
   "name": "datatrust",
   "private": true,
   "version": "0.1.0",
+  "description": "Datatrust investor web application",
   "packageManager": "pnpm@10.14.0",
   "engines": {
     "node": "24.x"
