@@ -16,6 +16,8 @@ export const datatrustConfig = {
   },
   presale: {
     status: 'CONFIGURATION_REQUIRED' as const,
+    liveFundsEnabled: false,
+    legalGate: 'REQUIRES_LEGAL_AND_OPERATIONAL_CLEARANCE' as const,
     round: null,
     price: null,
     acceptedAssets: [],
