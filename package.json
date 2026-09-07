@@ -13,5 +13,8 @@
     "lint": "pnpm --filter @datatrust/web lint",
     "typecheck": "pnpm --filter @datatrust/web typecheck",
     "test": "pnpm --filter @datatrust/web test"
+  },
+  "devDependencies": {
+    "next": "15.5.7"
   }
 }
