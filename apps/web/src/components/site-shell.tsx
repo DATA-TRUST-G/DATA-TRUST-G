@@ -15,24 +15,36 @@ const nav = [
 export function SiteShell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const onScroll = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       setProgress(max > 0 ? (window.scrollY / max) * 100 : 0);
+      setScrolled(window.scrollY > 12);
     };
+    const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape') setOpen(false); };
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('keydown', onKey);
     onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('keydown', onKey);
+    };
   }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
 
   return (
     <div className="site">
       <div className="scrollProgress" style={{ width: `${progress}%` }} aria-hidden="true" />
-      <header className="siteHeader">
+      <header className={`siteHeader ${scrolled ? 'isScrolled' : ''}`}>
         <a href="/" className="brand" aria-label="DataTrust home">
-          <img src="/datatrust-mark.svg" alt="" width="34" height="34" />
-          <span>DataTrust</span>
+          <span className="brandMark"><img src="/datatrust-mark.svg" alt="" width="38" height="38" /></span>
+          <span className="brandWord">DataTrust</span>
         </a>
         <nav className="desktopNav" aria-label="Primary navigation">
           {nav.map(([label, href]) => <a key={href} href={href}>{label}</a>)}
@@ -40,22 +52,25 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         <div className="headerActions">
           <a className="headerSignIn" href="/sign-in">Sign in</a>
           <a className="headerCta" href="/presale">Explore presale <span>↗</span></a>
-          <button className="menuButton" onClick={() => setOpen(!open)} aria-expanded={open} aria-label="Toggle navigation">
-            <span /><span />
+          <button className={`menuButton ${open ? 'isOpen' : ''}`} onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="mobile-navigation" aria-label={open ? 'Close navigation' : 'Open navigation'}>
+            <span /><span /><span />
           </button>
         </div>
       </header>
-      {open && <nav className="mobileNav" aria-label="Mobile navigation">
-        {nav.map(([label, href]) => <a key={href} href={href} onClick={() => setOpen(false)}>{label}<span>↗</span></a>)}
-        <a href="/sign-in" onClick={() => setOpen(false)}>Sign in <span>→</span></a>
-        <a className="mobileCta" href="/presale" onClick={() => setOpen(false)}>Explore the presale <span>↗</span></a>
+      {open && <nav id="mobile-navigation" className="mobileNav" aria-label="Mobile navigation">
+        <div className="mobileNavInner">
+          {nav.map(([label, href], i) => <a key={href} href={href} onClick={() => setOpen(false)}><span><small>0{i + 1}</small>{label}</span><b>↗</b></a>)}
+          <a href="/sign-in" onClick={() => setOpen(false)}><span><small>08</small>Sign in</span><b>→</b></a>
+          <a className="mobileCta" href="/presale" onClick={() => setOpen(false)}>Explore the presale <span>↗</span></a>
+        </div>
       </nav>}
       {children}
       <footer className="siteFooter">
         <div className="footerTop">
           <div className="footerBrand">
-            <a href="/" className="brand"><img src="/datatrust-mark.svg" alt="" width="40" height="40" /><span>DataTrust</span></a>
+            <a href="/" className="brand" aria-label="DataTrust home"><span className="brandMark"><img src="/datatrust-mark.svg" alt="" width="44" height="44" /></span><span className="brandWord">DataTrust</span></a>
             <p>Ethical Data Infrastructure for the AI Economy.</p>
+            <span className="footerSignal"><i /> Infrastructure / Rights / Participation</span>
           </div>
           <div className="footerColumns">
             <div><strong>Explore</strong><a href="/why-datatrust">Why DataTrust</a><a href="/architecture">Architecture</a><a href="/ai-economy">AI Economy</a><a href="/dtr">$DTR</a></div>
@@ -73,7 +88,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
 export function Reveal({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   useEffect(() => {
     const elements = Array.from(document.querySelectorAll('.reveal:not(.revealed)'));
-    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('revealed'); observer.unobserve(entry.target); } }), { threshold: 0.12 });
+    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('revealed'); observer.unobserve(entry.target); } }), { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
     elements.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
