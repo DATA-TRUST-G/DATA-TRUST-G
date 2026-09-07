@@ -1,9 +1,12 @@
-const states = [
-  ['CONFIRMED ALLOCATION', '—', 'Allocation appears here only after verified administrator confirmation.'],
-  ['PENDING', '—', 'Submitted payment evidence remains pending until reviewed.'],
-  ['ORDERS', '—', 'Your purchase history will appear here.'],
-];
+'use client';
+import { useEffect, useState } from 'react';
+import { supabase } from '../lib/supabase';
 
-export default function InvestorPortal() {
-  return <main className="portal"><header><strong>DATATRUST</strong><span>INVESTOR PORTAL / PHASE I</span></header><section className="hero"><div><small>OWNERSHIP / CONTROLLED STATE</small><h1>Know exactly where your participation stands.</h1><p>The investor portal distinguishes confirmed allocation from submitted or unverified payment evidence. No editable wallet balance is presented.</p></div><a href="/account">Account security →</a></section><section className="grid">{states.map(([label,value,copy]) => <article key={label}><small>{label}</small><strong>{value}</strong><p>{copy}</p></article>)}</section><section className="notice"><small>IMPORTANT</small><p>A transaction hash is evidence submitted for review. It is not confirmation of funds received or allocation.</p></section></main>;
+type Order={id:string;order_reference:string;purchase_value:number;purchase_currency:string;expected_dtr:number;status:string;created_at:string};
+export default function InvestorPortal(){
+ const [orders,setOrders]=useState<Order[]>([]); const [email,setEmail]=useState(''); const [loading,setLoading]=useState(true);
+ useEffect(()=>{let active=true;(async()=>{const {data:{user}}=await supabase.auth.getUser();if(!user){if(active)setLoading(false);return;}setEmail(user.email??'');const {data}=await supabase.from('presale_orders').select('id,order_reference,purchase_value,purchase_currency,expected_dtr,status,created_at').order('created_at',{ascending:false});if(active){setOrders((data??[]) as Order[]);setLoading(false);}})();return()=>{active=false}},[]);
+ const confirmed=orders.filter(o=>o.status==='CONFIRMED'||o.status==='DTR_ALLOCATED');
+ const pending=orders.length-confirmed.length;
+ return <main className="portal"><header><strong>DATATRUST</strong><span>INVESTOR PORTAL / PHASE I</span><a href="/sign-in">{email||'Sign in'}</a></header><section className="hero"><div><small>OWNERSHIP / CONTROLLED STATE</small><h1>Know exactly where your participation stands.</h1><p>The portal distinguishes confirmed allocations from submitted or unverified payment evidence. No editable wallet balance is presented.</p></div><a href="/presale">Participate →</a></section><section className="grid"><article><small>CONFIRMED ALLOCATION</small><strong>{confirmed.length?'Recorded':'—'}</strong><p>Derived from verified allocation ledger entries only.</p></article><article><small>PENDING</small><strong>{loading?'…':pending}</strong><p>Orders or payment evidence requiring the next workflow step.</p></article><article><small>ORDERS</small><strong>{loading?'…':orders.length}</strong><p>Purchase history is preserved by order rather than mutable balances.</p></article></section><section className="orders"><small>PURCHASE HISTORY</small><h2>Orders</h2>{orders.length===0?<p className="empty">No orders yet. Start with the presale workflow.</p>:orders.map(o=><article className="order" key={o.id}><div><small>{o.order_reference}</small><strong>{o.purchase_value} {o.purchase_currency}</strong></div><span>{o.status}</span><div><small>EXPECTED ALLOCATION</small><strong>{o.expected_dtr.toLocaleString()} $DTR</strong></div></article>)}</section><section className="notice"><small>IMPORTANT</small><p>A transaction hash is evidence submitted for review. It is not confirmation of funds received or allocation.</p></section></main>;
 }
